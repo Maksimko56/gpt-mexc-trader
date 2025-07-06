@@ -16,7 +16,7 @@ android.archs = arm64-v8a
 # API, NDK, Build Tools
 android.minapi = 21
 android.api = 31
-android.sdk = 33.0.2
+# android.sdk = 33.0.2   # Устарело, больше не нужно!
 android.ndk = 25b
 android.ndk_api = 21
 
