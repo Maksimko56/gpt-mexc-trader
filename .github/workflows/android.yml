@@ -1,4 +1,4 @@
-name: Android Build
+name: Android Build (Buildozer)
 
 on:
   workflow_dispatch:
@@ -8,32 +8,52 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout repository
+    - name: 🔄 Checkout repository
       uses: actions/checkout@v4
 
-    - name: 🛠️ Set up dependencies
+    - name: ⚙️ Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 📦 Install system dependencies
       run: |
         sudo dpkg --add-architecture i386
         sudo apt update
         sudo apt install -y \
-          zip unzip git openjdk-11-jdk python3-pip python3-venv \
-          build-essential ccache libncurses5 libstdc++6 zlib1g zlib1g-dev \
-          libncurses5:i386 libstdc++6:i386 zlib1g:i386 zlib1g-dev:i386 \
-          libffi-dev libssl-dev libjpeg-dev libfreetype6-dev pkg-config
+          build-essential \
+          ccache \
+          git \
+          libncurses5 \
+          libstdc++6 \
+          zlib1g \
+          zlib1g-dev \
+          libncurses5:i386 \
+          libstdc++6:i386 \
+          zlib1g:i386 \
+          zlib1g-dev:i386 \
+          unzip \
+          openjdk-17-jdk \
+          python3-pip \
+          python3-setuptools \
+          python3-virtualenv \
+          libffi-dev \
+          libssl-dev \
+          libjpeg-dev
 
-    - name: 🐍 Set up Python environment
+    - name: 🐍 Create virtual environment
       run: |
         python3 -m venv venv
         source venv/bin/activate
         pip install --upgrade pip
-        pip install cython buildozer
+        pip install buildozer cython
 
-    - name: 📦 Build APK
+    - name: 🧱 Build APK
       run: |
         source venv/bin/activate
-        buildozer -v android debug
+        buildozer android debug
 
-    - name: 📤 Upload APK
+    - name: 📤 Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: gpt-mexc-trader-apk
