@@ -39,11 +39,9 @@ jobs:
 
     - name: 📁 Set up Android SDK
       run: |
-        mkdir -p ~/.buildozer/android/platform
+        mkdir -p ~/.buildozer/android/platform/cmdline-tools/latest
         wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk.zip
-        unzip sdk.zip -d ~/.buildozer/android/platform/
-        mkdir -p ~/.buildozer/android/platform/cmdline-tools
-        mv ~/.buildozer/android/platform/cmdline-tools/cmdline-tools ~/.buildozer/android/platform/cmdline-tools/latest
+        unzip -q sdk.zip -d ~/.buildozer/android/platform/cmdline-tools/latest
 
     - name: 📲 Install Android SDK components
       run: |
