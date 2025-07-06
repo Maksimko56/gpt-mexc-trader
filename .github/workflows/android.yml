@@ -39,19 +39,23 @@ jobs:
 
     - name: 📁 Set up Android SDK
       run: |
-        mkdir -p ~/.buildozer/android/platform/cmdline-tools/latest
+        mkdir -p ~/.buildozer/android/platform/cmdline-tools
         wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk.zip
-        unzip -q sdk.zip -d ~/.buildozer/android/platform/cmdline-tools/latest
+        unzip -q sdk.zip -d ~/.buildozer/android/platform/cmdline-tools
+        mv ~/.buildozer/android/platform/cmdline-tools/cmdline-tools ~/.buildozer/android/platform/cmdline-tools/latest
 
     - name: 📲 Install Android SDK components
       run: |
-        yes | ~/.buildozer/android/platform/cmdline-tools/latest/bin/sdkmanager --sdk_root=${HOME}/.buildozer/android/platform/android-sdk \
+        yes | ~/.buildozer/android/platform/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk \
           "platform-tools" \
           "platforms;android-31" \
           "build-tools;33.0.2" \
           "ndk;25.2.9519653"
 
     - name: 🔨 Build APK
+      env:
+        ANDROID_HOME: ${{ github.workspace }}/.buildozer/android/platform/android-sdk
+        PATH: ${{ github.workspace }}/.buildozer/android/platform/android-sdk/platform-tools:${PATH}
       run: |
         buildozer android debug
 
