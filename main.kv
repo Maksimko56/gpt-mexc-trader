@@ -1,0 +1,34 @@
+<MainWindow>:
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+
+    Label:
+        id: price_label
+        text: "Загрузка..."
+        font_size: 28
+        size_hint_y: None
+        height: 50
+
+    Label:
+        text: root.balance_text
+        font_size: 16
+        size_hint_y: None
+        height: 30
+
+    Button:
+        text: "🔁 Переключить авто-режим"
+        on_press: root.toggle_auto()
+        size_hint_y: None
+        height: 40
+
+    ScrollView:
+        id: scroll_view
+        do_scroll_x: False
+
+        Label:
+            text: root.logs
+            font_size: 14
+            size_hint_y: None
+            height: self.texture_size[1]
+            text_size: self.width, None
