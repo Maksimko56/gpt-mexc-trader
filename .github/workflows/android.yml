@@ -43,12 +43,15 @@ jobs:
         python3 -m pip install --upgrade pip
         pip install buildozer cython virtualenv
 
-    - name: 📁 Set up Android SDK
+    - name: 📁 Set up Android SDK and create sdkmanager symlink
       run: |
         mkdir -p ~/.buildozer/android/platform/cmdline-tools
         wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk.zip
         unzip -q sdk.zip -d ~/.buildozer/android/platform/cmdline-tools
         mv ~/.buildozer/android/platform/cmdline-tools/cmdline-tools ~/.buildozer/android/platform/cmdline-tools/latest
+        # Симлинк для старого пути sdkmanager, чтобы Buildozer его нашёл
+        mkdir -p ~/.buildozer/android/platform/android-sdk/tools/bin
+        ln -sf ~/.buildozer/android/platform/cmdline-tools/latest/bin/sdkmanager ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
 
     - name: 📲 Install Android SDK components
       run: |
