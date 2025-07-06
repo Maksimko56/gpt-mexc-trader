@@ -1,4 +1,4 @@
-name: Android Build (Buildozer)
+name: 📦 Build Android APK
 
 on:
   workflow_dispatch:
@@ -8,30 +8,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 🔄 Checkout repository
+    - name: 📥 Checkout code
       uses: actions/checkout@v4
 
-    - name: ⚙️ Set up Python
-      uses: actions/setup-python@v4
+    - name: 🧱 Set up Python
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: "3.10"
 
     - name: 📦 Install system dependencies
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt update
         sudo apt install -y \
           build-essential \
           ccache \
           git \
-          libncurses5 \
+          libncurses6 \
           libstdc++6 \
           zlib1g \
           zlib1g-dev \
-          libncurses5:i386 \
-          libstdc++6:i386 \
-          zlib1g:i386 \
-          zlib1g-dev:i386 \
           unzip \
           openjdk-17-jdk \
           python3-pip \
@@ -39,21 +34,20 @@ jobs:
           python3-virtualenv \
           libffi-dev \
           libssl-dev \
-          libjpeg-dev
+          libjpeg-dev \
+          libsqlite3-dev
 
-    - name: 🐍 Create virtual environment
+    - name: 🐍 Install Python dependencies
       run: |
-        python3 -m venv venv
-        source venv/bin/activate
         pip install --upgrade pip
         pip install buildozer cython
 
-    - name: 🧱 Build APK
+    - name: 🏗️ Build APK
       run: |
-        source venv/bin/activate
+        cd ${{ github.workspace }}
         buildozer android debug
 
-    - name: 📤 Upload APK artifact
+    - name: ☁️ Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: gpt-mexc-trader-apk
