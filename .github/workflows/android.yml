@@ -59,4 +59,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: gptmexctrader-debug.apk
-        path: bin/*.apk
+        path: bin/*.app
