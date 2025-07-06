@@ -1,4 +1,4 @@
-name: 📦 Build Android APK
+name: build
 
 on:
   workflow_dispatch:
@@ -8,47 +8,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout code
+    - name: 🧾 Checkout repository
       uses: actions/checkout@v4
 
-    - name: 🧱 Set up Python
+    - name: ⚙️ Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version: '3.10'
 
-    - name: 📦 Install system dependencies
+    - name: 📦 Install dependencies
       run: |
-        sudo apt update
-        sudo apt install -y \
-          build-essential \
-          ccache \
-          git \
-          libncurses6 \
-          libstdc++6 \
-          zlib1g \
-          zlib1g-dev \
-          unzip \
-          openjdk-17-jdk \
-          python3-pip \
-          python3-setuptools \
-          python3-virtualenv \
-          libffi-dev \
-          libssl-dev \
-          libjpeg-dev \
-          libsqlite3-dev
-
-    - name: 🐍 Install Python dependencies
-      run: |
-        pip install --upgrade pip
+        python -m pip install --upgrade pip
         pip install buildozer cython
 
-    - name: 🏗️ Build APK
+    - name: 📁 Install system dependencies
       run: |
-        cd ${{ github.workspace }}
+        sudo dpkg --add-architecture i386
+        sudo apt update
+        sudo apt install -y zip unzip openjdk-17-jdk python3-dev \
+          libncurses5 curl git libstdc++6 zlib1g zlib1g-dev \
+          libgl1-mesa-dev libgles2-mesa-dev
+
+    - name: 📲 Install Android SDK + accept licenses
+      run: |
+        mkdir -p "$HOME/android-sdk"
+        cd "$HOME/android-sdk"
+        curl -o sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip sdk.zip -d cmdline-tools
+        mkdir -p cmdline-tools/latest
+        mv cmdline-tools/cmdline-tools/* cmdline-tools/latest/
+        export ANDROID_HOME=$HOME/android-sdk
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+        yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses
+        sdkmanager --sdk_root=$ANDROID_HOME \
+          "platform-tools" "platforms;android-31" "build-tools;33.0.2"
+
+    - name: 🔧 Build APK with Buildozer
+      run: |
+        export ANDROID_HOME=$HOME/android-sdk
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
         buildozer android debug
 
-    - name: ☁️ Upload APK
+    - name: 📤 Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: gpt-mexc-trader-apk
+        name: gpt-mexc-trader.apk
         path: bin/*.apk
