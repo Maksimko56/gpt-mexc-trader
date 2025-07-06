@@ -1,34 +1,64 @@
 <MainWindow>:
-    orientation: 'vertical'
+    orientation: "vertical"
     padding: 10
     spacing: 10
 
     Label:
         id: price_label
-        text: "Загрузка..."
-        font_size: 28
-        size_hint_y: None
-        height: 50
-
-    Label:
-        text: root.balance_text
-        font_size: 16
-        size_hint_y: None
-        height: 30
-
-    Button:
-        text: "🔁 Переключить авто-режим"
-        on_press: root.toggle_auto()
+        text: "BTC: — | RSI: —"
         size_hint_y: None
         height: 40
 
+    Label:
+        text: root.balance_text
+        size_hint_y: None
+        height: 30
+
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: None
+        height: 40
+
+        Button:
+            text: "Авто: ВКЛ" if root.auto_mode else "Авто: ВЫКЛ"
+            on_release: root.toggle_auto()
+
     ScrollView:
         id: scroll_view
-        do_scroll_x: False
-
-        Label:
-            text: root.logs
-            font_size: 14
+        BoxLayout:
+            id: log_box
+            orientation: 'vertical'
             size_hint_y: None
-            height: self.texture_size[1]
-            text_size: self.width, None
+            height: self.minimum_height
+
+            Label:
+                text: root.logs
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: self.width, None
+
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_y: None
+        height: 200
+        padding: 5
+        spacing: 5
+
+        TextInput:
+            id: input_api
+            hint_text: "MEXC API Key"
+            multiline: False
+
+        TextInput:
+            id: input_secret
+            hint_text: "MEXC API Secret"
+            multiline: False
+
+        TextInput:
+            id: input_openai
+            hint_text: "OpenAI API Key"
+            multiline: False
+
+        Button:
+            text: "Сохранить ключи"
+            on_release: root.save_keys()

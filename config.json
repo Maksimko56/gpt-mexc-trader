@@ -1,0 +1,5 @@
+{
+  "MEXC_API_KEY": "ваш_ключ",
+  "MEXC_SECRET": "ваш_секрет",
+  "OPENAI_KEY": "ваш_openai_ключ"
+}
