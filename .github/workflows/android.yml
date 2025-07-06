@@ -14,7 +14,7 @@ jobs:
     - name: 🐍 Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.10
+        python-version: 3.10  # ✅ Поддерживаемая версия для Buildozer
 
     - name: 📦 Install system dependencies
       run: |
@@ -24,14 +24,15 @@ jobs:
           libncurses5:i386 libstdc++6:i386 zlib1g:i386 \
           libssl-dev libffi-dev libsqlite3-dev \
           openjdk-17-jdk unzip wget git python3-pip \
-          libgl1-mesa-dev
+          libgl1-mesa-dev python3-setuptools python3-wheel \
+          libpython3-dev
 
-    - name: 🔧 Install Buildozer and Cython
+    - name: 🔧 Install Buildozer and dependencies
       run: |
         python3 -m pip install --upgrade pip
-        pip install buildozer cython virtualenv
+        pip install --upgrade Cython==0.29.36 buildozer
 
-    - name: 📁 Set up Buildozer environment
+    - name: 📁 Set up Buildozer Android SDK
       run: |
         mkdir -p ~/.buildozer/android/platform
         wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk.zip
