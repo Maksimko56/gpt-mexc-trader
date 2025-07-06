@@ -20,7 +20,7 @@ jobs:
     - name: 🐍 Set up Python 3.10
       uses: actions/setup-python@v4
       with:
-        python-version: "3.10"
+        python-version: '3.10'
 
     - name: 📦 Install system dependencies
       run: |
@@ -32,23 +32,22 @@ jobs:
           openjdk-17-jdk unzip wget git python3-pip \
           libgl1-mesa-dev
 
-    - name: 🔧 Install Buildozer and Cython
+    - name: 🔧 Install Buildozer and Python packages
       run: |
         python3 -m pip install --upgrade pip
-        pip install buildozer cython==0.29.36 virtualenv
+        pip install buildozer cython virtualenv
 
-    - name: 📁 Set up Buildozer environment
+    - name: 📁 Download and extract Android cmdline-tools
       run: |
         mkdir -p ~/.buildozer/android/platform
         wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk.zip
-        unzip sdk.zip -d ~/.buildozer/android/platform/
+        unzip sdk.zip -d ~/.buildozer/android/platform/cmdline-tools-temp
         mkdir -p ~/.buildozer/android/platform/cmdline-tools/latest
-        mv ~/.buildozer/android/platform/cmdline-tools/cmdline-tools/* ~/.buildozer/android/platform/cmdline-tools/latest/
-        rm -rf ~/.buildozer/android/platform/cmdline-tools/cmdline-tools
+        mv ~/.buildozer/android/platform/cmdline-tools-temp/cmdline-tools/* ~/.buildozer/android/platform/cmdline-tools/latest/
 
     - name: 📲 Install Android SDK components
       run: |
-        yes | ~/.buildozer/android/platform/cmdline-tools/latest/bin/sdkmanager --sdk_root=${HOME}/.buildozer/android/platform/android-sdk \
+        yes | ~/.buildozer/android/platform/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk \
           "platforms;android-31" \
           "build-tools;33.0.2" \
           "ndk;25.2.9519653" \
