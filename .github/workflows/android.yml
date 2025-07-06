@@ -14,7 +14,7 @@ jobs:
     - name: 🐍 Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: 3.10
 
     - name: ☕ Use Java 17
       uses: actions/setup-java@v3
@@ -41,7 +41,7 @@ jobs:
       run: |
         mkdir -p ~/.buildozer/android/platform
         wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk.zip
-        unzip sdk.zip -d ~/.buildozer/android/platform/cmdline-tools-temp
+        unzip -q sdk.zip -d ~/.buildozer/android/platform/cmdline-tools-temp
         mkdir -p ~/.buildozer/android/platform/cmdline-tools
         mv ~/.buildozer/android/platform/cmdline-tools-temp/cmdline-tools ~/.buildozer/android/platform/cmdline-tools/latest
 
