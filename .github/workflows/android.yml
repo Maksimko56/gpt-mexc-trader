@@ -61,8 +61,10 @@ jobs:
     - name: 🔨 Build APK
       env:
         ANDROID_HOME: ${{ github.workspace }}/.buildozer/android/platform/android-sdk
-        PATH: ${{ github.workspace }}/.buildozer/android/platform/android-sdk/platform-tools:${PATH}
+        PATH: /usr/bin:${{ github.workspace }}/.buildozer/android/platform/android-sdk/platform-tools:${PATH}
       run: |
+        which git
+        git --version
         buildozer android debug
 
     - name: 📤 Upload APK
