@@ -1,41 +1,39 @@
-name: Build APK
+name: Build Android APK
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 🧾 Checkout code
-      uses: actions/checkout@v3
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
 
-    - name: 🐍 Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.10
+      - name: ⚙️ Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: 📦 Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y \
-          build-essential ccache git zip unzip \
-          openjdk-17-jdk python3-pip python3-setuptools \
-          python3-wheel libncurses5 libstdc++6 zlib1g-dev \
-          libffi-dev libssl-dev libsqlite3-dev libjpeg-dev \
-          autoconf libtool pkg-config
+      - name: 🛠 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install buildozer cython
 
-        pip install --upgrade pip
-        pip install buildozer cython
+      - name: 📦 Build APK
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential ccache libncurses5 libstdc++6 zlib1g zlib1g-dev \
+                              libncurses5:i386 libstdc++6:i386 zlib1g:i386 zlib1g-dev:i386 \
+                              libssl-dev libffi-dev libsqlite3-dev libpng-dev libfreetype6-dev
+          buildozer -v android debug
 
-    - name: 🔧 Build APK
-      run: |
-        buildozer -v android debug
-
-    - name: 📤 Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: GPT_MEXC_Trader_APK
-        path: bin/*.apk
+      - name: 📤 Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GPT_MEXC_Trader_APK
+          path: bin/*.apk
