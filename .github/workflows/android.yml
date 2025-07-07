@@ -42,8 +42,12 @@ jobs:
       run: |
         mkdir -p ~/.buildozer/android/platform
         wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O sdk.zip
-        unzip -q sdk.zip -d ~/.buildozer/android/platform/cmdline-tools-temp
-        mv ~/.buildozer/android/platform/cmdline-tools-temp/cmdline-tools ~/.buildozer/android/platform/cmdline-tools/latest
+        unzip -q sdk.zip -d ~/.buildozer/android/platform/
+        mv ~/.buildozer/android/platform/cmdline-tools ~/.buildozer/android/platform/cmdline-tools/latest
+        
+        # Создаем символическую ссылку для совместимости
+        mkdir -p ~/.buildozer/android/platform/android-sdk/cmdline-tools
+        ln -s ~/.buildozer/android/platform/cmdline-tools/latest ~/.buildozer/android/platform/android-sdk/cmdline-tools/latest
 
     - name: 📲 Install Android SDK components
       run: |
