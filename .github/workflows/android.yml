@@ -74,3 +74,4 @@ jobs:
       with:
         name: gptmexctrader-debug.apk
         path: bin/*.apk
+        
